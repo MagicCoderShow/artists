@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.izrbh.artists.mapper.PermissionMapper">
+    <select id="selectPermissionListByRoleId" resultType="com.izrbh.artists.entity.Permission">
+        SELECT
+            p.id,
+            p.name,
+            p.code,
+            p.url,
+            p.enabled,
+            p.not_expired,
+            p.create_user,
+            p.create_time,
+            p.update_user,
+            p.update_time
+        FROM
+            permission p
+        LEFT JOIN role_permission_relation rp ON (p.id = rp.permission_id)
+        WHERE
+            p.enabled = 1 and p.not_expired = 1 and rp.role_id = ${roleId}
+    </select>
+
+    <select id="selectPermissionListByUserId" resultType="com.izrbh.artists.entity.Permission">
+        SELECT
+            p.id,
+            p.name,
+            p.code,
+            p.url,
+            p.enabled,
+            p.not_expired,
+            p.create_user,
+            p.create_time,
+            p.update_user,
+            p.update_time
+        FROM
+            permission p
+        LEFT JOIN role_permission_relation rp ON (p.id = rp.permission_id)
+        LEFT JOIN user_role_relation ur ON (ur.role_id = rp.role_id)
+        WHERE
+            p.enabled = 1 and p.not_expired = 1 and ur.user_id = ${userId}
+    </select>
+</mapper>
